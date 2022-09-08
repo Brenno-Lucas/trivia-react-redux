@@ -1,4 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { func } from 'prop-types';
+import { playerInfo } from '../redux/actions';
+import { setTokenStorage } from '../helpers/handlingLocalStorage';
+import requestTokenAPI from '../services/requestTokenAPI';
 
 class Login extends React.Component {
   state = {
@@ -10,6 +15,14 @@ class Login extends React.Component {
     this.setState({
       [name]: value,
     });
+  };
+
+  buttonPlayerSubmit = async () => {
+    const { name, email } = this.state;
+    const { player, history } = this.props;
+    setTokenStorage(await requestTokenAPI());
+    player(name, email);
+    history.push('/game');
   };
 
   render() {
@@ -49,6 +62,7 @@ class Login extends React.Component {
           type="button"
           data-testid="btn-play"
           disabled={ !valid }
+          onClick={ this.buttonPlayerSubmit }
         >
           Play
         </button>
@@ -57,4 +71,12 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => ({
+  player: (name, gravatarEmail) => dispatch(playerInfo(name, gravatarEmail)),
+});
+
+Login.propTypes = {
+  player: func,
+}.isRequired;
+
+export default connect(null, mapDispatchToProps)(Login);
