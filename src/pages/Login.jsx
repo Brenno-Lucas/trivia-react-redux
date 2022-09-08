@@ -26,6 +26,7 @@ class Login extends React.Component {
   };
 
   render() {
+    const { history } = this.props;
     const { email, name } = this.state;
     const magaicNumber = 3;
     const regex = /\S+@\S+\.\S+/;
@@ -65,6 +66,13 @@ class Login extends React.Component {
           onClick={ this.buttonPlayerSubmit }
         >
           Play
+        </button>
+        <button
+          type="button"
+          data-testid="btn-settings"
+          onClick={ () => { history.push('/settings'); } }
+        >
+          Configurações
         </button>
       </div>
     );
