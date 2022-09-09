@@ -2,8 +2,6 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 import renderWithRouterAndRedux from './helpers/renderWithRouterAndRedux';
 import userEvent from '@testing-library/user-event';
-import Settings from '../pages/Settings'
-import Game from '../pages/Game';
 import App from '../App'
 
 describe('Testando a página <Login />', () => {
@@ -65,40 +63,3 @@ describe('Testando a página <Login />', () => {
         expect(fetch).toHaveBeenCalled();
    });
 });
-
-describe('Testando a página <Game />', () => {
-    test('Verifica se existe um texto "Game"', () => {
-        renderWithRouterAndRedux(<Game />);
-    
-        const VerifyText = screen.getByText(/Game/i);
-        expect(VerifyText).toBeDefined();
-    });
-
-    test('Botão que leva para a tela <Game />', () => {
-        const { history } = renderWithRouterAndRedux(<App />);
-  
-        const buttonPlay = screen.getByTestId(/btn-play/i);
-        userEvent.click(buttonPlay);
-        expect(history.location.pathname).toBe('/');
-      })
-});
-
-describe('Testando a pagina <Settings />', () => {
-    test('Verifica se existe um <h1> com o texto "Settings"', () => {
-        renderWithRouterAndRedux(<Settings />);
-
-        const verifyHeading = screen.getByRole('heading', {
-            level: 1,
-            name: /Settings/i,
-        });
-        expect(verifyHeading).toBeDefined();
-    });
-
-    test('Botão que leva para a tela de configurações', () => {
-      const { history } = renderWithRouterAndRedux(<App />);
-
-      const buttonSettings = screen.getByTestId('btn-settings');
-      userEvent.click(buttonSettings);
-      expect(history.location.pathname).toBe('/settings');
-    })
-  });
