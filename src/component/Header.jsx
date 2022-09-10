@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { string } from 'prop-types';
 import md5 from 'crypto-js/md5';
+// import TriviaLogo from './TriviaLogo';
 
 class Header extends Component {
   state = {
@@ -29,6 +30,7 @@ class Header extends Component {
     const { linkImgGravatar, name, score } = this.state;
     return (
       <div>
+        {/* <TriviaLogo /> */}
         <figure>
           <img
             src={ linkImgGravatar }

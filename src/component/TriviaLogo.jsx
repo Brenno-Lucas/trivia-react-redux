@@ -1,15 +1,8 @@
-import React from 'react';
+// import React, { Component } from 'react';
+// import logo from '../trivia.png';
+// import '../App.css';
 
-class TriviaLogo extends React.Component {
-  render() {
-    return (
-      <div className="App-header">
-        {/* foi retirado do src o "{ logo }" pois estava dando erro nos testes, dizebdi que não estava definido */}
-        <img src="" className="App-logo" alt="logo" />
-        <p>SUA VEZ</p>
-      </div>
-    );
-  }
-}
-
-export default TriviaLogo;
+// class TriviaLogo extends React.Component {
+//   render() {
+//     return (
+//       <div className="App-header">
