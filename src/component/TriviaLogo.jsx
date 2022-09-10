@@ -2,14 +2,7 @@ import React, { Component } from 'react';
 import logo from '../trivia.png';
 import '../App.css';
 
-class TriviaLogo extends Component {
+class TriviaLogo extends React.Component {
   render() {
     return (
       <div className="App-header">
-        <img src={ logo } className="App-logo" alt="logo" />
-      </div>
-    );
-  }
-}
-
-export default TriviaLogo;
