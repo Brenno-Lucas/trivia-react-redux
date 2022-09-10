@@ -1,6 +1,6 @@
-const requestQuestsApi = (token) => {
-  const response = fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
-  const data = response.json();
+const requestQuestsApi = async (token) => {
+  const response = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
+  const data = await response.json();
   return data.results;
 };
 
