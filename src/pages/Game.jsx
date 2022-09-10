@@ -73,7 +73,7 @@ class Game extends React.Component {
       <div>
         <Header />
         <div>Game</div>
-        {questions[indexQuestions] && (
+        {questions[indexQuestions] && ( // iniciando requisito 07
           <div>
             <p
               data-testid="question-category"
