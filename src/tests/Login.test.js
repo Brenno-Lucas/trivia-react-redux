@@ -40,26 +40,4 @@ describe('Testando a página <Login />', () => {
         const buttonSettings = screen.getByTestId(/btn-settings/i);
         expect(buttonSettings).toBeDefined();
     })
-
-    test('Verifica se o fetch é chamado', () => {
-        renderWithRouterAndRedux(<App />)
-        ;
-        global.fetch = jest.fn(() => Promise.resolve({
-            json: () => Promise.resolve(fetch),
-          }));
-
-        const TEST_EMAIL = 'joberval@trybe.com'
-        const TEST_NAME = 'joberval'
-        
-        const verifyInput = screen.getByTestId('input-player-name');
-        userEvent.type(verifyInput, TEST_NAME);
-
-        const verifyEmail = screen.getByTestId('input-gravatar-email');
-        userEvent.type(verifyEmail, TEST_EMAIL);
-
-        const buttonPlay = screen.getByTestId('btn-play');
-        userEvent.click(buttonPlay);
-
-        expect(fetch).toHaveBeenCalled();
-   });
 });
