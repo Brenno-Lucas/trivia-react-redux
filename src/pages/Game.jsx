@@ -19,26 +19,20 @@ class Game extends React.Component {
     await this.requestQuestions();
     this.checkToken();
     this.countdownNextQuestion();
-  }
-
-  componentDidUpdate() {
     this.countdown();
   }
 
-  countdown = async () => {
+  componentDidUpdate() {
+    // this.countdown();
+  }
+
+  countdown = () => {
     const { counter } = this.state;
     const TIMECOUNTER = 1000;
-    if (counter >= 0) {
-      setTimeout(() => {
-        this.setState((state) => ({
-          counter: state.counter - 1,
-        }));
-      }, TIMECOUNTER);
-    } else {
-      return this.setState({
-        counter: 0,
-        buttonIsDisabled: true,
-      });
+    for (let i = counter; i > 0; i -= 1) {
+      setTimeout(() => this.setState((state) => ({
+        counter: state.counter - 1,
+      })), i * TIMECOUNTER);
     }
   };
 
