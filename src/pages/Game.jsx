@@ -10,13 +10,47 @@ class Game extends React.Component {
     questions: [],
     indexQuestions: 0,
     answers: [],
+    buttonIsDisabled: false,
+    counter: 30,
     // points: 0,
   };
 
   async componentDidMount() {
     await this.requestQuestions();
     this.checkToken();
+    this.countdownNextQuestion();
   }
+
+  componentDidUpdate() {
+    this.countdown();
+  }
+
+  countdown = async () => {
+    const { counter } = this.state;
+    const TIMECOUNTER = 1000;
+    if (counter >= 0) {
+      setTimeout(() => {
+        this.setState((state) => ({
+          counter: state.counter - 1,
+        }));
+      }, TIMECOUNTER);
+    } else {
+      return this.setState({
+        counter: 0,
+        buttonIsDisabled: true,
+      });
+    }
+  };
+
+  countdownNextQuestion = () => {
+    const TIMECOUNTDOWN = 30000;
+    setTimeout(() => {
+      this.setState({
+        buttonIsDisabled: true,
+      });
+      this.getCaptureAnswers();
+    }, TIMECOUNTDOWN);
+  };
 
   requestQuestions = async () => {
     const { getQuestions } = this.props;
@@ -41,7 +75,11 @@ class Game extends React.Component {
   };
 
   getCaptureAnswers = () => {
-    const { questions, indexQuestions } = this.state;
+    const {
+      questions,
+      indexQuestions,
+      buttonIsDisabled,
+    } = this.state;
     const NUMBERMAGIC = 0.5;
     console.log(questions[indexQuestions]);
     const answers = [(
@@ -53,6 +91,7 @@ class Game extends React.Component {
         value={ [questions[indexQuestions].correct_answer] }
         data-testid="correct-answer"
         onClick={ this.onSubmitAnswer }
+        disabled={ buttonIsDisabled }
       >
         {[questions[indexQuestions].correct_answer]}
       </button>)];
@@ -66,6 +105,7 @@ class Game extends React.Component {
           value={ element }
           data-testid={ `wrong-answer-${i}` }
           onClick={ this.onSubmitAnswer }
+          disabled={ buttonIsDisabled }
         >
           {element}
         </button>));
@@ -100,7 +140,12 @@ class Game extends React.Component {
   };
 
   render() {
-    const { answers, questions, indexQuestions } = this.state;
+    const {
+      answers,
+      questions,
+      indexQuestions,
+      counter,
+    } = this.state;
     const NUMBERMAGICBODY = 4;
     return (
       <div>
@@ -108,6 +153,7 @@ class Game extends React.Component {
         <div>Game</div>
         {questions[indexQuestions] && (
           <div>
+            <div>{ counter }</div>
             <p
               data-testid="question-category"
             >
