@@ -1,4 +1,4 @@
-// import React, { Component } from 'react';
+// import React from 'react';
 // import logo from '../trivia.png';
 // import '../App.css';
 
@@ -6,3 +6,10 @@
 //   render() {
 //     return (
 //       <div className="App-header">
+//         {logo}
+//       </div>
+//     );
+//   }
+// }
+
+// export default TriviaLogo;

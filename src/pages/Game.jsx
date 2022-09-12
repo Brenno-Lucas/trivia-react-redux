@@ -25,7 +25,7 @@ class Game extends React.Component {
   };
 
   checkToken = () => {
-    const { questions, history } = this.props;
+    const { questions } = this.props;
     console.log(questions.length);
     if (questions.length > 0) {
       console.log('verdadeiro');
@@ -36,7 +36,7 @@ class Game extends React.Component {
     } else {
       console.log('false');
       localStorage.clear();
-      history.push('/');
+      // history.push('/'); Codigo inutilizavel: "properties of undefined (reading 'push')"
     }
   };
 
