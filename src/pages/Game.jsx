@@ -36,7 +36,7 @@ class Game extends React.Component {
     } else {
       console.log('false');
       localStorage.clear();
-      // history.push('/'); Codigo inutilizavel: "properties of undefined (reading 'push')"
+      history.push('/'); Codigo inutilizavel: "properties of undefined (reading 'push')"
     }
   };
 
