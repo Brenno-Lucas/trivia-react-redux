@@ -3,7 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../component/Header';
 import { getTokenStorage } from '../helpers/handlingLocalStorage';
-import { thunkQuestionsAPI } from '../redux/actions/index';
+import { thunkQuestionsAPI, addScore } from '../redux/actions/index';
+
+const NUMBERMAGICBODY = 4;
 
 class Game extends React.Component {
   state = {
@@ -12,7 +14,9 @@ class Game extends React.Component {
     answers: [],
     buttonIsDisabled: false,
     counter: 30,
-    // points: 0,
+    assertions: 0,
+    score: 0,
+    nextVisible: false,
   };
 
   async componentDidMount() {
@@ -39,8 +43,10 @@ class Game extends React.Component {
   countdownNextQuestion = () => {
     const TIMECOUNTDOWN = 30000;
     setTimeout(() => {
-      this.setState({
-        buttonIsDisabled: true,
+      const button = document.getElementsByTagName('button');
+      Object.values(button).map((item) => {
+        item.disabled = true;
+        return item;
       });
       this.getCaptureAnswers();
     }, TIMECOUNTDOWN);
@@ -109,8 +115,9 @@ class Game extends React.Component {
     });
   };
 
-  onSubmitAnswer = () => {
+  onSubmitAnswer = ({ target: { value } }) => {
     const { questions, indexQuestions } = this.state;
+    console.log(questions);
     const correctAnswer = questions[indexQuestions].correct_answer;
     const answers = document.getElementById('answer-options');
     const answersElements = [];
@@ -124,13 +131,63 @@ class Game extends React.Component {
       .map((i) => i.textContent);
     incorrectButton.map((i) => document.getElementById(i)
       .setAttribute('style', 'border: 3px solid red'));
-    // Esse trecho se refere a um somador de pontos e o indexQuestion(para ir avançando nas questões)
-    // this.setState({
-    // if (value === correctAnswer) {
-    //     points: points + 1,
-    //     indexQuestions: indexQuestions + 1,
-    //   }, () => { this.getCaptureAnswers(); });
-    // }
+    const BTN = document.getElementsByTagName('button');
+    Object.values(BTN).map((item) => {
+      item.disabled = true;
+      return item;
+    });
+    this.buttonNext();
+    this.rightAnswerAccumulator(value, correctAnswer);
+  };
+
+  buttonNext = () => {
+    this.setState({
+      nextVisible: true,
+    });
+  };
+
+  checkDifficulty = () => {
+    const { questions, indexQuestions } = this.state;
+    const THREE = 3;
+    switch (questions[indexQuestions].difficulty) {
+    case 'hard':
+      return THREE;
+    case 'medium':
+      return 2;
+    default:
+      return 1;
+    }
+  };
+
+  rightAnswerAccumulator = (chosenAnswer, correctAnswer) => {
+    const { player } = this.props;
+    const { assertions, counter, score } = this.state;
+    const NUMBERMAGIC = 10;
+    const actualScore = NUMBERMAGIC + (counter * this.checkDifficulty());
+    if (chosenAnswer === correctAnswer) {
+      console.log('chamou');
+      this.setState({
+        assertions: assertions + 1,
+        score: score + actualScore,
+      }, () => {
+        const { score: test } = this.state;
+        player(test);
+      });
+    }
+  };
+
+  nextQuestion = () => {
+    const { history } = this.props;
+    const { indexQuestions } = this.state;
+    if (indexQuestions === NUMBERMAGICBODY) history.push('/feedback');
+    this.setState((state) => ({
+      indexQuestions: state.indexQuestions + 1,
+      nextVisible: false,
+      counter: 30,
+      buttonIsDisabled: false,
+    }), () => {
+      this.getCaptureAnswers();
+    });
   };
 
   render() {
@@ -139,12 +196,20 @@ class Game extends React.Component {
       questions,
       indexQuestions,
       counter,
+      nextVisible,
     } = this.state;
-    const NUMBERMAGICBODY = 4;
     return (
       <div>
         <Header />
         <div>Game</div>
+        { nextVisible && (
+          <button
+            data-testid="btn-next"
+            type="button"
+            onClick={ this.nextQuestion }
+          >
+            Next
+          </button>)}
         {questions[indexQuestions] && (
           <div>
             <div>{ counter }</div>
@@ -170,10 +235,12 @@ class Game extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getQuestions: (token) => dispatch(thunkQuestionsAPI(token)),
+  player: (score) => dispatch(addScore(score)),
 });
 
 const mapStateToProps = (state) => ({
   questions: state.questionsReducer.questions,
+  score: state.player.score,
 });
 
 Game.propTypes = {
