@@ -13,6 +13,7 @@ class Game extends React.Component {
     buttonIsDisabled: false,
     counter: 30,
     assertions: 0,
+    score: 0,
   };
 
   async componentDidMount() {
@@ -134,23 +135,27 @@ class Game extends React.Component {
   };
 
   checkDifficulty = () => {
+    const { question, indexQuestions } = this.state;
+    const { dificulty } = question[indexQuestions];
+    const THREE = 3;
     switch (dificulty) {
-      case 'hard':
-        return 3;
-      case 'medium':
-        return 2
-      case 'easy': 
-        return 1    
+    case 'hard':
+      return THREE;
+    case 'medium':
+      return 2;
+    default:
+      return 1;
+    }
   };
 
   rightAnswerAccumulator = (chosenAnswer) => {
-    const { question, indexQuestions, assertions, counter } = this.state;
-    const dificulty = question[indexQuestions].dificulty;
-    const score = 10 + (counter * dificulty);
+    const { indexQuestions, assertions, counter } = this.state;
+    const score = 10 + (counter * this.checkDifficulty());
     if (chosenAnswer === correctAnswer) {
       this.setState({
         assertions: assertions + 1,
         indexQuestions: indexQuestions + 1,
+        score,
       });
     }
   }; // Acumulador de acertos, será que ta certo ?
