@@ -5,6 +5,8 @@ import Header from '../component/Header';
 import { getTokenStorage } from '../helpers/handlingLocalStorage';
 import { thunkQuestionsAPI, addScore } from '../redux/actions/index';
 
+const NUMBERMAGICBODY = 4;
+
 class Game extends React.Component {
   state = {
     questions: [],
@@ -14,6 +16,7 @@ class Game extends React.Component {
     counter: 30,
     assertions: 0,
     score: 0,
+    nextVisible: false,
   };
 
   async componentDidMount() {
@@ -133,8 +136,14 @@ class Game extends React.Component {
       item.disabled = true;
       return item;
     });
-    console.log(value, correctAnswer);
+    this.buttonNext();
     this.rightAnswerAccumulator(value, correctAnswer);
+  };
+
+  buttonNext = () => {
+    this.setState({
+      nextVisible: true,
+    });
   };
 
   checkDifficulty = () => {
@@ -167,18 +176,40 @@ class Game extends React.Component {
     }
   };
 
+  nextQuestion = () => {
+    const { history } = this.props;
+    const { indexQuestions } = this.state;
+    if (indexQuestions === NUMBERMAGICBODY) history.push('/feedback');
+    this.setState((state) => ({
+      indexQuestions: state.indexQuestions + 1,
+      nextVisible: false,
+      counter: 30,
+      buttonIsDisabled: false,
+    }), () => {
+      this.getCaptureAnswers();
+    });
+  };
+
   render() {
     const {
       answers,
       questions,
       indexQuestions,
       counter,
+      nextVisible,
     } = this.state;
-    const NUMBERMAGICBODY = 4;
     return (
       <div>
         <Header />
         <div>Game</div>
+        { nextVisible && (
+          <button
+            data-testid="btn-next"
+            type="button"
+            onClick={ this.nextQuestion }
+          >
+            Next
+          </button>)}
         {questions[indexQuestions] && (
           <div>
             <div>{ counter }</div>
