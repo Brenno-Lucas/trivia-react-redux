@@ -12,7 +12,7 @@ class Game extends React.Component {
     answers: [],
     buttonIsDisabled: false,
     counter: 30,
-    // points: 0,
+    assertions: 0,
   };
 
   async componentDidMount() {
@@ -39,8 +39,9 @@ class Game extends React.Component {
   countdownNextQuestion = () => {
     const TIMECOUNTDOWN = 30000;
     setTimeout(() => {
-      this.setState({
-        buttonIsDisabled: true,
+      Object.values(button).map((item) => {
+        item.disabled = true;
+        return item;
       });
       this.getCaptureAnswers();
     }, TIMECOUNTDOWN);
@@ -109,8 +110,9 @@ class Game extends React.Component {
     });
   };
 
-  onSubmitAnswer = () => {
+  onSubmitAnswer = ({ target: { value } }) => {
     const { questions, indexQuestions } = this.state;
+    console.log(questions);
     const correctAnswer = questions[indexQuestions].correct_answer;
     const answers = document.getElementById('answer-options');
     const answersElements = [];
@@ -124,14 +126,34 @@ class Game extends React.Component {
       .map((i) => i.textContent);
     incorrectButton.map((i) => document.getElementById(i)
       .setAttribute('style', 'border: 3px solid red'));
-    // Esse trecho se refere a um somador de pontos e o indexQuestion(para ir avançando nas questões)
-    // this.setState({
-    // if (value === correctAnswer) {
-    //     points: points + 1,
-    //     indexQuestions: indexQuestions + 1,
-    //   }, () => { this.getCaptureAnswers(); });
-    // }
+    Object.values(button).map((item) => {
+      item.disabled = true;
+      return item;
+    });
+    this.rightAnswerAccumulator(value);
   };
+
+  checkDifficulty = () => {
+    switch (dificulty) {
+      case 'hard':
+        return 3;
+      case 'medium':
+        return 2
+      case 'easy': 
+        return 1    
+  };
+
+  rightAnswerAccumulator = (chosenAnswer) => {
+    const { question, indexQuestions, assertions, counter } = this.state;
+    const dificulty = question[indexQuestions].dificulty;
+    const score = 10 + (counter * dificulty);
+    if (chosenAnswer === correctAnswer) {
+      this.setState({
+        assertions: assertions + 1,
+        indexQuestions: indexQuestions + 1,
+      });
+    }
+  }; // Acumulador de acertos, será que ta certo ?
 
   render() {
     const {
