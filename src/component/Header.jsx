@@ -8,7 +8,6 @@ class Header extends Component {
   state = {
     linkImgGravatar: '',
     name: '',
-    score: '',
   };
 
   componentDidMount() {
@@ -16,18 +15,19 @@ class Header extends Component {
   }
 
   createLinkImg = () => {
-    const { name, email, score } = this.props;
+    const { name, email } = this.props;
     const gravatarConversion = md5(email).toString();
     const linkImgGravatar = `https://www.gravatar.com/avatar/${gravatarConversion}`;
     this.setState({
       linkImgGravatar,
       name,
-      score,
     });
   };
 
   render() {
-    const { linkImgGravatar, name, score } = this.state;
+    const { linkImgGravatar, name } = this.state;
+    const { score } = this.props;
+
     return (
       <div>
         {/* <TriviaLogo /> */}
@@ -54,9 +54,9 @@ class Header extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  email: state.playerReducer.gravatarEmail,
-  name: state.playerReducer.name,
-  score: state.playerReducer.score,
+  email: state.player.gravatarEmail,
+  name: state.player.name,
+  score: state.player.score,
 });
 
 Header.propTypes = {

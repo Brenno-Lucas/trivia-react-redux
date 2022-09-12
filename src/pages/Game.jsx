@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../component/Header';
 import { getTokenStorage } from '../helpers/handlingLocalStorage';
-import { thunkQuestionsAPI } from '../redux/actions/index';
+import { thunkQuestionsAPI, addScore } from '../redux/actions/index';
 
 class Game extends React.Component {
   state = {
@@ -40,6 +40,7 @@ class Game extends React.Component {
   countdownNextQuestion = () => {
     const TIMECOUNTDOWN = 30000;
     setTimeout(() => {
+      const button = document.getElementsByTagName('button');
       Object.values(button).map((item) => {
         item.disabled = true;
         return item;
@@ -127,18 +128,19 @@ class Game extends React.Component {
       .map((i) => i.textContent);
     incorrectButton.map((i) => document.getElementById(i)
       .setAttribute('style', 'border: 3px solid red'));
-    Object.values(button).map((item) => {
+    const BTN = document.getElementsByTagName('button');
+    Object.values(BTN).map((item) => {
       item.disabled = true;
       return item;
     });
-    this.rightAnswerAccumulator(value);
+    console.log(value, correctAnswer);
+    this.rightAnswerAccumulator(value, correctAnswer);
   };
 
   checkDifficulty = () => {
-    const { question, indexQuestions } = this.state;
-    const { dificulty } = question[indexQuestions];
+    const { questions, indexQuestions } = this.state;
     const THREE = 3;
-    switch (dificulty) {
+    switch (questions[indexQuestions].difficulty) {
     case 'hard':
       return THREE;
     case 'medium':
@@ -148,17 +150,22 @@ class Game extends React.Component {
     }
   };
 
-  rightAnswerAccumulator = (chosenAnswer) => {
-    const { indexQuestions, assertions, counter } = this.state;
-    const score = 10 + (counter * this.checkDifficulty());
+  rightAnswerAccumulator = (chosenAnswer, correctAnswer) => {
+    const { player } = this.props;
+    const { assertions, counter, score } = this.state;
+    const NUMBERMAGIC = 10;
+    const actualScore = NUMBERMAGIC + (counter * this.checkDifficulty());
     if (chosenAnswer === correctAnswer) {
+      console.log('chamou');
       this.setState({
         assertions: assertions + 1,
-        indexQuestions: indexQuestions + 1,
-        score,
+        score: score + actualScore,
+      }, () => {
+        const { score: test } = this.state;
+        player(test);
       });
     }
-  }; // Acumulador de acertos, será que ta certo ?
+  };
 
   render() {
     const {
@@ -197,10 +204,12 @@ class Game extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getQuestions: (token) => dispatch(thunkQuestionsAPI(token)),
+  player: (score) => dispatch(addScore(score)),
 });
 
 const mapStateToProps = (state) => ({
   questions: state.questionsReducer.questions,
+  score: state.player.score,
 });
 
 Game.propTypes = {

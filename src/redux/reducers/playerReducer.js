@@ -1,4 +1,4 @@
-import { PLAYER_INFO } from '../actions';
+import { PLAYER_INFO, ADD_SCORE } from '../actions';
 
 const INITIAL_STATE = {
   name: '',
@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   gravatarEmail: '',
 };
 
-const playerReducer = (state = INITIAL_STATE, action) => {
+const player = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case PLAYER_INFO:
     return ({
@@ -15,9 +15,14 @@ const playerReducer = (state = INITIAL_STATE, action) => {
       name: action.name,
       gravatarEmail: action.gravatarEmail,
     });
+  case ADD_SCORE:
+    return ({
+      ...state,
+      score: action.score,
+    });
   default:
     return state;
   }
 };
 
-export default playerReducer;
+export default player;

@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import playerReducer from './playerReducer';
+import player from './playerReducer';
 import questionsReducer from './questionsReducer';
 
 const rootReducer = combineReducers({
-  playerReducer,
+  player,
   questionsReducer,
 });
 
