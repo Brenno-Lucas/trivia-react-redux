@@ -1,6 +1,7 @@
 import { array } from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import Header from '../component/Header';
 import {
   getTokenStorage,
@@ -243,4 +244,4 @@ Game.propTypes = {
   questions: array,
 }.isRequired;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Game);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Game));

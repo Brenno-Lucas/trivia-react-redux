@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { object } from 'prop-types';
+import { withRouter } from 'react-router';
 
 class Ranking extends React.Component {
   render() {
@@ -23,4 +24,4 @@ class Ranking extends React.Component {
 Ranking.propTypes = {
   history: object,
 }.isRequired;
-export default connect()(Ranking);
+export default withRouter(connect()(Ranking));

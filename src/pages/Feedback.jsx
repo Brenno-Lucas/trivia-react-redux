@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { number } from 'prop-types';
+import { withRouter } from 'react-router';
 import Header from '../component/Header';
 
 class Feedback extends React.Component {
   messageForHit = () => {
     const { assertions } = this.props;
-    console.log(assertions);
     const magic = 3;
     if (assertions >= magic) {
       return <p data-testid="feedback-text">Well Done!</p>;
@@ -16,7 +16,6 @@ class Feedback extends React.Component {
 
   render() {
     const { assertions, score, history } = this.props;
-    console.log(assertions, score);
     return (
       <div>
         <Header />
@@ -63,4 +62,4 @@ Feedback.propTypes = {
   assertions: number,
 }.isRequered;
 
-export default connect(mapStateToProps, null)(Feedback);
+export default withRouter(connect(mapStateToProps, null)(Feedback));
