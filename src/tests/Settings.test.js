@@ -19,7 +19,7 @@ describe('Testando a pagina <Settings />', () => {
     test('Botão que leva para a tela de configurações', () => {
       const { history } = renderWithRouterAndRedux(<App />);
 
-      const buttonSettings = screen.getByTestId('btn-settings');
+      const buttonSettings = screen.getByTestId(/btn-settings/i);
       userEvent.click(buttonSettings);
       expect(history.location.pathname).toBe('/settings');
     })
