@@ -2,7 +2,11 @@ import { array } from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
 import Header from '../component/Header';
-import { getTokenStorage } from '../helpers/handlingLocalStorage';
+import {
+  getTokenStorage,
+  setPlayersStorage,
+  getPlayersStorage,
+} from '../helpers/handlingLocalStorage';
 import { thunkQuestionsAPI, addScore } from '../redux/actions/index';
 
 const NUMBERMAGICBODY = 4;
@@ -17,6 +21,7 @@ class Game extends React.Component {
     assertions: 0,
     score: 0,
     nextVisible: false,
+    players: [],
   };
 
   async componentDidMount() {
@@ -24,10 +29,7 @@ class Game extends React.Component {
     this.checkToken();
     this.countdownNextQuestion();
     this.countdown();
-  }
-
-  componentDidUpdate() {
-    // this.countdown();
+    this.getPlayersLocalStorage();
   }
 
   countdown = () => {
@@ -38,6 +40,18 @@ class Game extends React.Component {
         counter: state.counter - 1,
       })), i * TIMECOUNTER);
     }
+  };
+
+  addPlayerLocalStorage = () => { // deve ser chamada quando clicar no botão next;
+    const { name, email, score } = this.props;
+    const { players, indexQuestions } = this.state;
+    const objPlayer = { name, email, score };
+    if (indexQuestions >= NUMBERMAGICBODY) setPlayersStorage([...players, objPlayer]);
+  };
+
+  getPlayersLocalStorage = () => {
+    const players = getPlayersStorage();
+    if (players) this.setState({ players });
   };
 
   countdownNextQuestion = () => {
@@ -60,28 +74,20 @@ class Game extends React.Component {
 
   checkToken = () => {
     const { questions, history } = this.props;
-    console.log(questions.length);
     if (questions.length > 0) {
-      console.log('verdadeiro');
       this.setState({
         questions,
       });
       this.getCaptureAnswers();
     } else {
-      console.log('false');
       localStorage.clear();
       history.push('/');
     }
   };
 
   getCaptureAnswers = () => {
-    const {
-      questions,
-      indexQuestions,
-      buttonIsDisabled,
-    } = this.state;
+    const { questions, indexQuestions, buttonIsDisabled } = this.state;
     const NUMBERMAGIC = 0.5;
-    console.log(questions[indexQuestions]);
     const answers = [(
       <button
         key={ 3 }
@@ -117,7 +123,6 @@ class Game extends React.Component {
 
   onSubmitAnswer = ({ target: { value } }) => {
     const { questions, indexQuestions } = this.state;
-    console.log(questions);
     const correctAnswer = questions[indexQuestions].correct_answer;
     const answers = document.getElementById('answer-options');
     const answersElements = [];
@@ -141,21 +146,16 @@ class Game extends React.Component {
   };
 
   buttonNext = () => {
-    this.setState({
-      nextVisible: true,
-    });
+    this.setState({ nextVisible: true });
   };
 
   checkDifficulty = () => {
     const { questions, indexQuestions } = this.state;
     const THREE = 3;
     switch (questions[indexQuestions].difficulty) {
-    case 'hard':
-      return THREE;
-    case 'medium':
-      return 2;
-    default:
-      return 1;
+    case 'hard': return THREE;
+    case 'medium': return 2;
+    default: return 1;
     }
   };
 
@@ -165,7 +165,6 @@ class Game extends React.Component {
     const NUMBERMAGIC = 10;
     const actualScore = NUMBERMAGIC + (counter * this.checkDifficulty());
     if (chosenAnswer === correctAnswer) {
-      console.log('chamou');
       this.setState({
         assertions: assertions + 1,
         score: score + actualScore,
@@ -179,15 +178,16 @@ class Game extends React.Component {
   nextQuestion = () => {
     const { history } = this.props;
     const { indexQuestions } = this.state;
-    if (indexQuestions === NUMBERMAGICBODY) history.push('/feedback');
+    if (indexQuestions === NUMBERMAGICBODY) {
+      this.addPlayerLocalStorage();
+      history.push('/feedback');
+    }
     this.setState((state) => ({
       indexQuestions: state.indexQuestions + 1,
       nextVisible: false,
       counter: 30,
       buttonIsDisabled: false,
-    }), () => {
-      this.getCaptureAnswers();
-    });
+    }), () => this.getCaptureAnswers());
   };
 
   render() {
