@@ -6,9 +6,12 @@ import Header from '../component/Header';
 class Feedback extends React.Component {
   messageForHit = () => {
     const { assertions } = this.props;
+    console.log(assertions);
     const magic = 3;
-    if (assertions < magic) return <p data-testid="feedback-tex">Could be better...</p>;
-    return <p>Well Done!</p>;
+    if (assertions >= magic) {
+      return <p data-testid="feedback-text">Well Done!</p>;
+    }
+    if (assertions < magic) return <p data-testid="feedback-text">Could be better...</p>;
   };
 
   render() {

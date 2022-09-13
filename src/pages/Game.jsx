@@ -9,6 +9,7 @@ import {
 } from '../helpers/handlingLocalStorage';
 import { thunkQuestionsAPI, addScore } from '../redux/actions/index';
 
+const BTN = document.getElementsByTagName('button');
 const NUMBERMAGICBODY = 4;
 
 class Game extends React.Component {
@@ -57,11 +58,11 @@ class Game extends React.Component {
   countdownNextQuestion = () => {
     const TIMECOUNTDOWN = 30000;
     setTimeout(() => {
-      const button = document.getElementsByTagName('button');
-      Object.values(button).map((item) => {
+      Object.values(BTN).map((item) => {
         item.disabled = true;
         return item;
       });
+      this.setState({ nextVisible: true });
       this.getCaptureAnswers();
     }, TIMECOUNTDOWN);
   };
@@ -136,17 +137,12 @@ class Game extends React.Component {
       .map((i) => i.textContent);
     incorrectButton.map((i) => document.getElementById(i)
       .setAttribute('style', 'border: 3px solid red'));
-    const BTN = document.getElementsByTagName('button');
     Object.values(BTN).map((item) => {
-      item.disabled = true;
+      item.disabled = false;
       return item;
     });
-    this.buttonNext();
-    this.rightAnswerAccumulator(value, correctAnswer);
-  };
-
-  buttonNext = () => {
     this.setState({ nextVisible: true });
+    this.rightAnswerAccumulator(value, correctAnswer);
   };
 
   checkDifficulty = () => {
@@ -169,8 +165,8 @@ class Game extends React.Component {
         assertions: assertions + 1,
         score: score + actualScore,
       }, () => {
-        const { score: test } = this.state;
-        player(test);
+        const { score: test, assertions: test2 } = this.state;
+        player(test, test2);
       });
     }
   };
@@ -235,7 +231,7 @@ class Game extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getQuestions: (token) => dispatch(thunkQuestionsAPI(token)),
-  player: (score) => dispatch(addScore(score)),
+  player: (score, assertions) => dispatch(addScore(score, assertions)),
 });
 
 const mapStateToProps = (state) => ({
