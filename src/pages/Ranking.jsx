@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { connect } from 'react-redux';
+import { object } from 'prop-types';
 
 class Ranking extends React.Component {
   render() {
@@ -19,4 +19,7 @@ class Ranking extends React.Component {
   }
 }
 
+Ranking.propTypes = {
+  history: object,
+}.isRequired;
 export default connect()(Ranking);
