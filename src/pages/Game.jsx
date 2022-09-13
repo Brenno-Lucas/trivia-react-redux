@@ -47,7 +47,6 @@ class Game extends React.Component {
     const { name, email, score } = this.props;
     const { players, indexQuestions } = this.state;
     const objPlayer = { name, email, score };
-    console.log(objPlayer);
     if (indexQuestions >= NUMBERMAGICBODY) setPlayersStorage([...players, objPlayer]);
   };
 
@@ -150,9 +149,7 @@ class Game extends React.Component {
     const { questions, indexQuestions } = this.state;
     const THREE = 3;
     switch (questions[indexQuestions].difficulty) {
-    case 'hard': return THREE;
-    case 'medium': return 2;
-    default: return 1;
+    case 'hard': return THREE; case 'medium': return 2; default: return 1;
     }
   };
 
@@ -185,6 +182,10 @@ class Game extends React.Component {
       counter: 30,
       buttonIsDisabled: false,
     }), () => this.getCaptureAnswers());
+    Object.values(BTN).map((item) => {
+      item.style = 'border:';
+      return item;
+    });
   };
 
   render() {
