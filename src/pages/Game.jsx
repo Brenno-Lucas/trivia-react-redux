@@ -150,9 +150,7 @@ class Game extends React.Component {
     const { questions, indexQuestions } = this.state;
     const THREE = 3;
     switch (questions[indexQuestions].difficulty) {
-    case 'hard': return THREE;
-    case 'medium': return 2;
-    default: return 1;
+    case 'hard': return THREE; case 'medium': return 2; default: return 1;
     }
   };
 
@@ -185,6 +183,10 @@ class Game extends React.Component {
       counter: 30,
       buttonIsDisabled: false,
     }), () => this.getCaptureAnswers());
+    Object.values(BTN).map((item) => {
+      item.style = 'border:';
+      return item;
+    });
   };
 
   render() {
@@ -238,10 +240,11 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => ({
   questions: state.questionsReducer.questions,
   score: state.player.score,
+  email: state.player.gravatarEmail,
+  name: state.player.name,
 });
 
 Game.propTypes = {
   questions: array,
 }.isRequired;
-
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Game));

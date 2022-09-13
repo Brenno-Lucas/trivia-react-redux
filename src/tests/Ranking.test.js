@@ -31,4 +31,6 @@ describe('Testando a página <Ranking />', () => {
         userEvent.click(buttonInicio)
         expect(history.location.pathname).toBe('/')
     });
+
+    test('Verifica', () => {});
 });

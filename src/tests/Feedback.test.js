@@ -83,7 +83,7 @@ describe('Testando a página Feedback', () => {
 
     test('Verifica se com 3 acertos aparece a mensagem "Well Done"', async () => {
         renderWithRouterAndRedux(<App />);
-
+    
         const TEST_NAME = 'joberval'
         const TEST_EMAIL = 'joberval@trybe.com'
         const verifyInput = screen.getByTestId(/input-player-name/i);
@@ -94,7 +94,7 @@ describe('Testando a página Feedback', () => {
         const buttonPlay = screen.getByTestId(/btn-play/i);
         userEvent.click(buttonPlay);
 
-        await screen.findByTestId(/question-category/i, {} ,{timeout: 5000});
+        await screen.findByTestId(/question-text/i, {} ,{timeout: 10000});
         const buttonCorretAnswer =  await screen.findByTestId(/correct-answer/i, {} , jest.setTimeout({newTimeout: 10000}));
         userEvent.click(buttonCorretAnswer)
         const buttonNext = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))
@@ -137,7 +137,7 @@ describe('Testando a página Feedback', () => {
         const buttonPlay = screen.getByTestId(/btn-play/i);
         userEvent.click(buttonPlay);
 
-        await screen.findByTestId(/question-category/i, {} ,{timeout: 5000});
+        await screen.findByTestId(/question-text/i, {} ,{timeout: 10000});
         const buttonCorretAnswer =  await screen.findByTestId(/wrong-answer-0/i, {} , jest.setTimeout({newTimeout: 10000}));
         userEvent.click(buttonCorretAnswer)
         const buttonNext = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))

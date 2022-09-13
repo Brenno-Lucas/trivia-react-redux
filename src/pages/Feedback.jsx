@@ -3,8 +3,16 @@ import { connect } from 'react-redux';
 import { number } from 'prop-types';
 import { withRouter } from 'react-router';
 import Header from '../component/Header';
+import { addScore } from '../redux/actions/index';
 
 class Feedback extends React.Component {
+  resetScoreAndRedirect = () => {
+    const { history, player } = this.props;
+    console.log('reset');
+    player(0, 0);
+    history.push('/');
+  };
+
   messageForHit = () => {
     const { assertions } = this.props;
     const magic = 3;
@@ -36,7 +44,7 @@ class Feedback extends React.Component {
         <button
           type="button"
           data-testid="btn-play-again"
-          onClick={ () => history.push('/') }
+          onClick={ this.resetScoreAndRedirect }
         >
           Play Again
         </button>
@@ -58,8 +66,12 @@ const mapStateToProps = (state) => ({
   score: state.player.score,
 });
 
+const mapDispatchToProps = (dispatch) => ({
+  player: (score, assertions) => dispatch(addScore(score, assertions)),
+});
+
 Feedback.propTypes = {
   assertions: number,
 }.isRequered;
 
-export default withRouter(connect(mapStateToProps, null)(Feedback));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Feedback));
