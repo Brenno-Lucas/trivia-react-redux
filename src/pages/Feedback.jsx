@@ -13,6 +13,7 @@ class Feedback extends React.Component {
 
   render() {
     const { assertions, score, history } = this.props;
+    console.log(assertions, score);
     return (
       <div>
         <Header />
@@ -51,8 +52,8 @@ class Feedback extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  assertions: state.playerReducer.assertions,
-  score: state.playerReducer.score,
+  assertions: state.player.assertions,
+  score: state.player.score,
 });
 
 Feedback.propTypes = {
