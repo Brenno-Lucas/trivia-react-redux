@@ -47,6 +47,7 @@ class Game extends React.Component {
     const { name, email, score } = this.props;
     const { players, indexQuestions } = this.state;
     const objPlayer = { name, email, score };
+    console.log(objPlayer);
     if (indexQuestions >= NUMBERMAGICBODY) setPlayersStorage([...players, objPlayer]);
   };
 
@@ -237,6 +238,8 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = (state) => ({
   questions: state.questionsReducer.questions,
   score: state.player.score,
+  email: state.player.gravatarEmail,
+  name: state.player.name,
 });
 
 Game.propTypes = {
