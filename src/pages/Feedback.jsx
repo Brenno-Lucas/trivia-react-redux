@@ -16,10 +16,10 @@ class Feedback extends React.Component {
   messageForHit = () => {
     const { assertions } = this.props;
     const magic = 3;
-    if (assertions >= magic) {
-      return <p data-testid="feedback-text">Well Done!</p>;
-    }
-    if (assertions < magic) return <p data-testid="feedback-text">Could be better...</p>;
+    const Well = <p data-testid="feedback-text">Well Done!</p>;
+    const Could = <p data-testid="feedback-text">Could be better...</p>;
+    const currenct = assertions >= magic ? Well : Could;
+    return currenct;
   };
 
   render() {

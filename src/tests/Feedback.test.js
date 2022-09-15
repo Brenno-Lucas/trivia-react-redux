@@ -124,46 +124,46 @@ describe('Testando a página Feedback', () => {
         expect(textCouldBeBetter).toBeInTheDocument();
     });
 
-    // test('Verifica se errar todas as perguntas aparece a mensagem "Could be better..."', async () => {
-    //     renderWithRouterAndRedux(<App />);
+    test('Verifica se errar todas as perguntas aparece a mensagem "Could be better..."', async () => {
+        renderWithRouterAndRedux(<App />);
 
-    //     const TEST_NAME = 'joberval'
-    //     const TEST_EMAIL = 'joberval@trybe.com'
-    //     const verifyInput = screen.getByTestId(/input-player-name/i);
-    //     const verifyEmail = screen.getByTestId(/input-gravatar-email/i);
-    //     userEvent.type(verifyInput, TEST_NAME);
-    //     userEvent.type(verifyEmail, TEST_EMAIL);
+        const TEST_NAME = 'joberval'
+        const TEST_EMAIL = 'joberval@trybe.com'
+        const verifyInput = screen.getByTestId(/input-player-name/i);
+        const verifyEmail = screen.getByTestId(/input-gravatar-email/i);
+        userEvent.type(verifyInput, TEST_NAME);
+        userEvent.type(verifyEmail, TEST_EMAIL);
 
-    //     const buttonPlay = screen.getByTestId(/btn-play/i);
-    //     userEvent.click(buttonPlay);
+        const buttonPlay = screen.getByTestId(/btn-play/i);
+        userEvent.click(buttonPlay);
         
-    //     await screen.findByTestId(/question-text/i, {} ,{timeout: 10000});
-    //     const buttonCorretAnswer =  await screen.findByTestId(/wrong-answer-0/i, {} , jest.setTimeout({newTimeout: 10000}));
-    //     userEvent.click(buttonCorretAnswer)
-    //     const buttonNext = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))
-    //     userEvent.click(buttonNext)
+        await screen.findByTestId(/question-text/i, {} ,{timeout: 10000});
+        const buttonCorretAnswer =  await screen.findByTestId(/wrong-answer-0/i, {} , jest.setTimeout({newTimeout: 10000}));
+        userEvent.click(buttonCorretAnswer)
+        const buttonNext = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))
+        userEvent.click(buttonNext)
 
-    //     const buttonCorretAnswerSecond =  await screen.findByTestId(/wrong-answer-0/i, {} , jest.setTimeout({newTimeout: 10000}));
-    //     userEvent.click(buttonCorretAnswerSecond)
-    //     const buttonNextSecond = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))
-    //     userEvent.click(buttonNextSecond)
+        const buttonCorretAnswerSecond =  await screen.findByTestId(/wrong-answer-0/i, {} , jest.setTimeout({newTimeout: 10000}));
+        userEvent.click(buttonCorretAnswerSecond)
+        const buttonNextSecond = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))
+        userEvent.click(buttonNextSecond)
 
-    //     const buttonCorretAnswerThird =  await screen.findByTestId(/wrong-answer-0/i, {} , jest.setTimeout({newTimeout: 10000}));
-    //     userEvent.click(buttonCorretAnswerThird)
-    //     const buttonNextThrird = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))
-    //     userEvent.click(buttonNextThrird)
+        const buttonCorretAnswerThird =  await screen.findByTestId(/wrong-answer-0/i, {} , jest.setTimeout({newTimeout: 10000}));
+        userEvent.click(buttonCorretAnswerThird)
+        const buttonNextThrird = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))
+        userEvent.click(buttonNextThrird)
 
-    //     const buttonCorretFourth =  await screen.findByTestId(/wrong-answer-0/i, {} , jest.setTimeout({newTimeout: 10000}));
-    //     userEvent.click(buttonCorretFourth)
-    //     const buttonNextFourth = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))
-    //     userEvent.click(buttonNextFourth)
+        const buttonCorretFourth =  await screen.findByTestId(/wrong-answer-0/i, {} , jest.setTimeout({newTimeout: 10000}));
+        userEvent.click(buttonCorretFourth)
+        const buttonNextFourth = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))
+        userEvent.click(buttonNextFourth)
 
-    //     const buttonCorretFifth =  await screen.findByTestId(/wrong-answer-0/i, {} , jest.setTimeout({newTimeout: 10000}));
-    //     userEvent.click(buttonCorretFifth)
-    //     const buttonNextFifth = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))
-    //     userEvent.click(buttonNextFifth)
+        const buttonCorretFifth =  await screen.findByTestId(/wrong-answer-0/i, {} , jest.setTimeout({newTimeout: 10000}));
+        userEvent.click(buttonCorretFifth)
+        const buttonNextFifth = await screen.findByTestId(/btn-next/i, {},jest.setTimeout({newTimeout: 10000}))
+        userEvent.click(buttonNextFifth)
 
-    //     const textCouldBeBetter = await screen.findByText(/Could be better.../i, {} , jest.setTimeout({newTimeout: 10000}));
-    //     expect(textCouldBeBetter).toBeInTheDocument();
-    // });
+        const textCouldBeBetter = await screen.findByText(/Could be better.../i, {} , jest.setTimeout({newTimeout: 10000}));
+        expect(textCouldBeBetter).toBeInTheDocument();
+    });
 });

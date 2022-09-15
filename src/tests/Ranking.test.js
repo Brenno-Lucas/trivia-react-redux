@@ -3,16 +3,18 @@ import renderWithRouterAndRedux from './helpers/renderWithRouterAndRedux';
 import userEvent from '@testing-library/user-event'
 import { screen } from '@testing-library/react'
 import Ranking from '../pages/Ranking';
+import { setPlayersStorage, getPlayersStorage} from '../helpers/handlingLocalStorage';
 
 describe('Testando a página <Ranking />', () => {
-    test('Verificando se exite um h1 com o texto "Ranking"', () => {
-        renderWithRouterAndRedux(<Ranking />);
+    const initialState = [
+        { name: 'yarles', email: 'yarles100@gmail.com', score: 100 },
+        { name: 'body', email: 'body100@gmail.com', score: 150 },
+        { name: 'exemplo', email: 'exemplo100@gmail.com', score: 250 },
+    ];
+    setPlayersStorage(initialState);
 
-        const headingRanking = screen.getByRole('heading', {
-            level: 1,
-            name: /RanKing/i
-        })
-        expect(headingRanking).toBeInTheDocument();
+    test('verificando se mock storage funciona', () => {
+        expect(getPlayersStorage()).toEqual(initialState);
     });
 
     test('Verifica se encontra um button (inicio)', () => {
@@ -23,6 +25,8 @@ describe('Testando a página <Ranking />', () => {
         })
         expect(buttonInicio).toBeInTheDocument();
     });
+
+    
 
     test('Verifica se ao clicar no botão é redirecionado a página de inicio', () => {
         const { history } = renderWithRouterAndRedux(<Ranking />);
