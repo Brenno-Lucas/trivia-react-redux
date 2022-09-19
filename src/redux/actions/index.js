@@ -26,9 +26,10 @@ const rejectedQuestions = (error) => ({
   error,
 });
 
-export const addScore = (score) => ({
+export const addScore = (score, assertions) => ({
   type: ADD_SCORE,
   score,
+  assertions,
 });
 
 export const thunkQuestionsAPI = (token) => async (dispatch) => {

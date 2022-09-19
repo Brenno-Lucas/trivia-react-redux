@@ -46,7 +46,7 @@ class Header extends Component {
         <div
           data-testid="header-score"
         >
-          { `score: ${score}` }
+          {score}
         </div>
       </div>
     );

@@ -1,10 +1,16 @@
 import { array } from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import Header from '../component/Header';
-import { getTokenStorage } from '../helpers/handlingLocalStorage';
+import {
+  getTokenStorage,
+  setPlayersStorage,
+  getPlayersStorage,
+} from '../helpers/handlingLocalStorage';
 import { thunkQuestionsAPI, addScore } from '../redux/actions/index';
 
+const BTN = document.getElementsByTagName('button');
 const NUMBERMAGICBODY = 4;
 
 class Game extends React.Component {
@@ -17,6 +23,7 @@ class Game extends React.Component {
     assertions: 0,
     score: 0,
     nextVisible: false,
+    players: [],
   };
 
   async componentDidMount() {
@@ -24,10 +31,7 @@ class Game extends React.Component {
     this.checkToken();
     this.countdownNextQuestion();
     this.countdown();
-  }
-
-  componentDidUpdate() {
-    // this.countdown();
+    this.getPlayersLocalStorage();
   }
 
   countdown = () => {
@@ -40,14 +44,26 @@ class Game extends React.Component {
     }
   };
 
+  addPlayerLocalStorage = () => { // deve ser chamada quando clicar no botão next;
+    const { name, email, score } = this.props;
+    const { players, indexQuestions } = this.state;
+    const objPlayer = { name, email, score };
+    if (indexQuestions >= NUMBERMAGICBODY) setPlayersStorage([...players, objPlayer]);
+  };
+
+  getPlayersLocalStorage = () => {
+    const players = getPlayersStorage();
+    if (players) this.setState({ players });
+  };
+
   countdownNextQuestion = () => {
     const TIMECOUNTDOWN = 30000;
     setTimeout(() => {
-      const button = document.getElementsByTagName('button');
-      Object.values(button).map((item) => {
+      Object.values(BTN).map((item) => {
         item.disabled = true;
         return item;
       });
+      this.setState({ nextVisible: true });
       this.getCaptureAnswers();
     }, TIMECOUNTDOWN);
   };
@@ -60,28 +76,20 @@ class Game extends React.Component {
 
   checkToken = () => {
     const { questions, history } = this.props;
-    console.log(questions.length);
     if (questions.length > 0) {
-      console.log('verdadeiro');
       this.setState({
         questions,
       });
       this.getCaptureAnswers();
     } else {
-      console.log('false');
       localStorage.clear();
       history.push('/');
     }
   };
 
   getCaptureAnswers = () => {
-    const {
-      questions,
-      indexQuestions,
-      buttonIsDisabled,
-    } = this.state;
+    const { questions, indexQuestions, buttonIsDisabled } = this.state;
     const NUMBERMAGIC = 0.5;
-    console.log(questions[indexQuestions]);
     const answers = [(
       <button
         key={ 3 }
@@ -117,7 +125,6 @@ class Game extends React.Component {
 
   onSubmitAnswer = ({ target: { value } }) => {
     const { questions, indexQuestions } = this.state;
-    console.log(questions);
     const correctAnswer = questions[indexQuestions].correct_answer;
     const answers = document.getElementById('answer-options');
     const answersElements = [];
@@ -131,31 +138,19 @@ class Game extends React.Component {
       .map((i) => i.textContent);
     incorrectButton.map((i) => document.getElementById(i)
       .setAttribute('style', 'border: 3px solid red'));
-    const BTN = document.getElementsByTagName('button');
     Object.values(BTN).map((item) => {
-      item.disabled = true;
+      item.disabled = false;
       return item;
     });
-    this.buttonNext();
+    this.setState({ nextVisible: true });
     this.rightAnswerAccumulator(value, correctAnswer);
-  };
-
-  buttonNext = () => {
-    this.setState({
-      nextVisible: true,
-    });
   };
 
   checkDifficulty = () => {
     const { questions, indexQuestions } = this.state;
     const THREE = 3;
     switch (questions[indexQuestions].difficulty) {
-    case 'hard':
-      return THREE;
-    case 'medium':
-      return 2;
-    default:
-      return 1;
+    case 'hard': return THREE; case 'medium': return 2; default: return 1;
     }
   };
 
@@ -165,13 +160,12 @@ class Game extends React.Component {
     const NUMBERMAGIC = 10;
     const actualScore = NUMBERMAGIC + (counter * this.checkDifficulty());
     if (chosenAnswer === correctAnswer) {
-      console.log('chamou');
       this.setState({
         assertions: assertions + 1,
         score: score + actualScore,
       }, () => {
-        const { score: test } = this.state;
-        player(test);
+        const { score: test, assertions: test2 } = this.state;
+        player(test, test2);
       });
     }
   };
@@ -179,14 +173,19 @@ class Game extends React.Component {
   nextQuestion = () => {
     const { history } = this.props;
     const { indexQuestions } = this.state;
-    if (indexQuestions === NUMBERMAGICBODY) history.push('/feedback');
+    if (indexQuestions === NUMBERMAGICBODY) {
+      this.addPlayerLocalStorage();
+      history.push('/feedback');
+    }
     this.setState((state) => ({
       indexQuestions: state.indexQuestions + 1,
       nextVisible: false,
       counter: 30,
       buttonIsDisabled: false,
-    }), () => {
-      this.getCaptureAnswers();
+    }), () => this.getCaptureAnswers());
+    Object.values(BTN).map((item) => {
+      item.style = 'border:';
+      return item;
     });
   };
 
@@ -235,16 +234,17 @@ class Game extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   getQuestions: (token) => dispatch(thunkQuestionsAPI(token)),
-  player: (score) => dispatch(addScore(score)),
+  player: (score, assertions) => dispatch(addScore(score, assertions)),
 });
 
 const mapStateToProps = (state) => ({
   questions: state.questionsReducer.questions,
   score: state.player.score,
+  email: state.player.gravatarEmail,
+  name: state.player.name,
 });
 
 Game.propTypes = {
   questions: array,
 }.isRequired;
-
-export default connect(mapStateToProps, mapDispatchToProps)(Game);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Game));

@@ -86,7 +86,7 @@ describe('Testando a página <Game />npm run teste', () => {
         expect(buttonWrongtAnswer).toBeInTheDocument();
     })
 
-    test('Verifica se encontra um border: 3px solid rgb(6, 240, 15)', async () => {
+    test('Verifica se encontra um border: 2px outset buttonface', async () => {
         renderWithRouterAndRedux(<Game />);
 
         const buttonCorretAnswer =  await screen.findByTestId(/correct-answer/i , {} ,jest.setTimeout({newTimeout: 10000}));
@@ -94,5 +94,12 @@ describe('Testando a página <Game />npm run teste', () => {
         userEvent.click(buttonCorretAnswer);
         expect(buttonCorretAnswer).toBeInTheDocument();
         expect(styles.border).toBe('2px outset buttonface')
+    })
+
+    test('Verificando se existe um contador de pontos', () => {
+        renderWithRouterAndRedux(<Game />);
+
+        const headerScore = screen.getByTestId(/header-score/i);
+        expect(headerScore).toBeDefined();
     })
 });
